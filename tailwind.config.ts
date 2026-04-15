@@ -51,14 +51,18 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        gold: {
-          DEFAULT: "hsl(var(--gold))",
-          light: "hsl(var(--gold-light))",
-          dark: "hsl(var(--gold-dark))",
+        silver: {
+          DEFAULT: "hsl(var(--silver))",
+          light: "hsl(var(--silver-light))",
+          dark: "hsl(var(--silver-dark))",
         },
-        sunset: {
-          pink: "hsl(var(--sunset-pink))",
-          purple: "hsl(var(--sunset-purple))",
+        cobalt: {
+          DEFAULT: "hsl(var(--cobalt))",
+          glow: "hsl(var(--cobalt-glow))",
+        },
+        midnight: {
+          DEFAULT: "hsl(var(--midnight))",
+          light: "hsl(var(--midnight-light))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -98,8 +102,8 @@ export default {
           "50%": { transform: "translateY(-20px)" },
         },
         "glow-pulse": {
-          "0%, 100%": { opacity: "0.6", boxShadow: "0 0 20px 5px hsla(var(--gold) / 0.2)" },
-          "50%": { opacity: "1", boxShadow: "0 0 40px 15px hsla(var(--gold) / 0.4)" },
+          "0%, 100%": { opacity: "0.6", boxShadow: "0 0 20px 5px hsla(210 20% 72% / 0.15)" },
+          "50%": { opacity: "1", boxShadow: "0 0 40px 15px hsla(210 20% 72% / 0.3)" },
         },
       },
       animation: {

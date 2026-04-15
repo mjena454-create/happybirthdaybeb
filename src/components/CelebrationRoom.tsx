@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import confetti from "canvas-confetti";
 import birthdayQueen from "@/assets/birthday-queen.jpg";
@@ -11,16 +11,16 @@ const Lantern = ({ index }: { index: number }) => {
 
   return (
     <motion.div
-      className="absolute w-6 h-8 md:w-8 md:h-10 rounded-full lantern-glow"
+      className="absolute w-5 h-7 md:w-7 md:h-9 rounded-full lantern-glow"
       style={{
         left: `${x}%`,
         top: `${y}%`,
-        background: `radial-gradient(ellipse, hsl(var(--gold-light)), hsl(var(--gold)) 60%, transparent)`,
+        background: `radial-gradient(ellipse, hsl(var(--silver-light)), hsl(var(--cobalt) / 0.6) 60%, transparent)`,
       }}
       animate={{
-        y: [-10, -30, -10],
+        y: [-10, -40, -10],
         x: [-5, 5, -5],
-        opacity: [0.5, 0.9, 0.5],
+        opacity: [0.3, 0.7, 0.3],
       }}
       transition={{
         duration,
@@ -29,6 +29,40 @@ const Lantern = ({ index }: { index: number }) => {
         ease: "easeInOut",
       }}
     />
+  );
+};
+
+const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) => {
+  const [displayed, setDisplayed] = useState("");
+  const [started, setStarted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setStarted(true), delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  useEffect(() => {
+    if (!started) return;
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i <= text.length) {
+        setDisplayed(text.slice(0, i));
+        i++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 40);
+    return () => clearInterval(interval);
+  }, [started, text]);
+
+  return (
+    <span ref={ref}>
+      {displayed}
+      {started && displayed.length < text.length && (
+        <span className="inline-block w-0.5 h-5 bg-primary ml-0.5" style={{ animation: "typewriter-blink 0.8s infinite" }} />
+      )}
+    </span>
   );
 };
 
@@ -41,10 +75,6 @@ const CelebrationRoom = () => {
     offset: ["start end", "end start"],
   });
 
-  // Background transition from cloud dancer to sunset
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
-
-  // Kinetic typography
   const textY = useTransform(scrollYProgress, [0.2, 0.6], [100, 0]);
   const textOpacity = useTransform(scrollYProgress, [0.2, 0.4], [0, 1]);
   const textScale = useTransform(scrollYProgress, [0.2, 0.5], [0.8, 1]);
@@ -52,32 +82,23 @@ const CelebrationRoom = () => {
   const handleMakeWish = () => {
     setWishMade(true);
 
-    // Gold leaf fountain
-    const duration = 4000;
+    // Silver rain / falling stars
+    const duration = 5000;
     const end = Date.now() + duration;
-
-    const goldColors = ["#C9A96E", "#E8D5A3", "#B8963E", "#F0E6C8"];
+    const silverColors = ["#B0BEC5", "#CFD8DC", "#90A4AE", "#ECEFF1", "#607D8B"];
 
     const frame = () => {
       confetti({
-        particleCount: 3,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0, y: 0.8 },
-        colors: goldColors,
-        shapes: ["square"],
-        scalar: 1.5,
-        drift: 0.5,
-      });
-      confetti({
-        particleCount: 3,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1, y: 0.8 },
-        colors: goldColors,
-        shapes: ["square"],
-        scalar: 1.5,
-        drift: -0.5,
+        particleCount: 2,
+        angle: 90,
+        spread: 160,
+        origin: { x: Math.random(), y: -0.1 },
+        colors: silverColors,
+        shapes: ["circle"],
+        scalar: 0.8,
+        gravity: 0.6,
+        drift: (Math.random() - 0.5) * 0.5,
+        ticks: 300,
       });
 
       if (Date.now() < end) {
@@ -93,13 +114,7 @@ const CelebrationRoom = () => {
       ref={containerRef}
       className="relative min-h-[300vh] overflow-hidden"
     >
-      {/* Sunset gradient overlay */}
-      <motion.div
-        className="fixed inset-0 bg-sunset-gradient pointer-events-none z-0"
-        style={{ opacity: bgOpacity }}
-      />
-
-      {/* Letter from the heart */}
+      {/* Letter from the heart — typewriter style */}
       <div className="relative z-10 py-32 px-6 min-h-screen flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, y: 60 }}
@@ -111,20 +126,29 @@ const CelebrationRoom = () => {
           <p className="font-body text-xs tracking-[0.5em] text-muted-foreground uppercase mb-6">
             A Letter from the Heart
           </p>
-          <h2 className="font-heading text-3xl md:text-4xl font-light text-gold-gradient mb-8">
+          <h2 className="font-heading text-3xl md:text-4xl font-light text-silver-gradient mb-8">
             Dear Sanjana,
           </h2>
-          <p className="font-body text-sm md:text-base leading-relaxed text-foreground/70 mb-4">
-            Nineteen chapters of your story have been written, and each one has been more beautiful than the last. 
-            You bring light into every room, warmth into every conversation, and magic into the most ordinary moments.
-          </p>
-          <p className="font-body text-sm md:text-base leading-relaxed text-foreground/70 mb-4">
-            This space was made for you — a sanctuary where every memory lives, 
-            every laugh echoes, and every dream is honored.
-          </p>
-          <p className="font-heading text-lg italic text-primary mt-8">
+          <div className="font-body text-sm md:text-base leading-relaxed text-foreground/60 space-y-4">
+            <p>
+              <TypewriterText text="Nineteen chapters of your story have been written, and each one has been more beautiful than the last." delay={500} />
+            </p>
+            <p>
+              <TypewriterText text="You bring light into every room, warmth into every conversation, and magic into the most ordinary moments." delay={4500} />
+            </p>
+            <p>
+              <TypewriterText text="This space was made for you — a sanctuary where every memory lives, every laugh echoes, and every dream is honored." delay={8500} />
+            </p>
+          </div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 12, duration: 1 }}
+            className="font-heading text-lg italic text-primary mt-8"
+          >
             Here's to chapter nineteen. ✦
-          </p>
+          </motion.p>
         </motion.div>
       </div>
 
@@ -134,7 +158,6 @@ const CelebrationRoom = () => {
           <Lantern key={i} index={i} />
         ))}
 
-        {/* Dust motes */}
         {Array.from({ length: 20 }).map((_, i) => (
           <div
             key={`dust-${i}`}
@@ -154,11 +177,11 @@ const CelebrationRoom = () => {
             style={{ y: textY, opacity: textOpacity, scale: textScale }}
             className="font-heading text-5xl md:text-7xl lg:text-8xl font-light text-center leading-tight"
           >
-            <span className="text-gold-gradient">Happy 19th</span>
+            <span className="text-silver-shimmer">Happy 19th</span>
             <br />
-            <span className="text-gold-gradient">Birthday,</span>
+            <span className="text-silver-gradient">Birthday,</span>
             <br />
-            <span className="text-gold-gradient italic">Sanjana</span>
+            <span className="text-silver-shimmer italic">Sanjana</span>
           </motion.h2>
         </div>
       </div>
@@ -181,7 +204,7 @@ const CelebrationRoom = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="glass-strong rounded-full px-12 py-5 font-heading text-lg tracking-[0.15em] text-foreground hover:bg-primary/10 transition-colors duration-500 animate-glow-pulse"
+              className="glow-button rounded-full px-12 py-5 font-heading text-lg tracking-[0.15em] text-foreground/80 bg-transparent animate-glow-pulse"
             >
               ✦ Make a Wish ✦
             </motion.button>
@@ -203,7 +226,7 @@ const CelebrationRoom = () => {
                 className="rounded-2xl max-w-sm w-full h-auto"
               />
             </div>
-            <p className="font-heading text-2xl md:text-3xl italic text-gold-gradient">
+            <p className="font-heading text-2xl md:text-3xl italic text-silver-gradient">
               May every wish come true ✦
             </p>
           </motion.div>
