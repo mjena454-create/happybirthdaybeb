@@ -19,7 +19,7 @@ const Header = () => {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
     >
-      <span className="font-heading text-sm tracking-[0.3em] text-foreground/70 uppercase">
+      <span className="font-heading text-sm tracking-[0.3em] text-foreground/50 uppercase">
         Sanjana Vol. 19
       </span>
       <span className="font-body text-xs tracking-widest text-muted-foreground tabular-nums">

@@ -8,9 +8,9 @@ interface BottomNavProps {
 
 const navItems = [
   { id: "home", icon: Home, label: "Home" },
-  { id: "memories", icon: Image, label: "Memories" },
-  { id: "fm", icon: Radio, label: "FM 19.0" },
-  { id: "celebration", icon: PartyPopper, label: "The Party" },
+  { id: "memories", icon: Image, label: "Gallery" },
+  { id: "fm", icon: Radio, label: "Radio" },
+  { id: "celebration", icon: PartyPopper, label: "Celebration" },
 ];
 
 const BottomNav = ({ activeSection, onNavigate }: BottomNavProps) => {
@@ -29,8 +29,8 @@ const BottomNav = ({ activeSection, onNavigate }: BottomNavProps) => {
             onClick={() => onNavigate(item.id)}
             className={`relative flex items-center gap-2 px-4 py-2.5 rounded-full transition-all duration-500 ${
               isActive
-                ? "bg-primary/15 text-primary"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:text-foreground/70"
             }`}
           >
             <item.icon size={18} strokeWidth={1.5} />
