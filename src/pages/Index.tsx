@@ -22,7 +22,7 @@ const Index = () => {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.2 }
     );
 
     sections.forEach((id) => {
@@ -31,7 +31,7 @@ const Index = () => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [entered]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     setMousePos({
@@ -41,9 +41,15 @@ const Index = () => {
   }, []);
 
   const handleNavigate = (section: string) => {
-    const el = document.getElementById(section);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+    if (!entered && section !== "home") {
+      setEntered(true);
+      setTimeout(() => {
+        const el = document.getElementById(section);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      const el = document.getElementById(section);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -52,23 +58,37 @@ const Index = () => {
     setTimeout(() => {
       const el = document.getElementById("memories");
       if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 200);
+    }, 300);
   };
 
   return (
     <div
-      className="relative bg-background min-h-screen overflow-x-hidden"
+      className="relative min-h-screen overflow-x-hidden"
+      style={{ background: "hsl(var(--midnight))" }}
       onMouseMove={handleMouseMove}
     >
-      {/* Interactive grainy gradient background */}
+      {/* Interactive gradient background */}
       <div
-        className="fixed inset-0 z-0 pointer-events-none transition-all duration-1000"
+        className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse at ${mousePos.x * 100}% ${mousePos.y * 100}%, hsl(var(--cobalt) / 0.08) 0%, hsl(var(--midnight)) 60%)`,
+          background: `
+            radial-gradient(ellipse 800px 600px at ${mousePos.x * 100}% ${mousePos.y * 100}%, hsla(220, 60%, 55%, 0.06) 0%, transparent 70%),
+            radial-gradient(ellipse 600px 400px at ${100 - mousePos.x * 100}% ${100 - mousePos.y * 100}%, hsla(210, 20%, 72%, 0.03) 0%, transparent 70%),
+            hsl(var(--midnight))
+          `,
+          transition: "background 0.3s ease-out",
         }}
       />
 
-      {/* Film grain overlay */}
+      {/* Subtle vignette */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse at center, transparent 40%, hsla(222, 47%, 1%, 0.5) 100%)",
+        }}
+      />
+
+      {/* Film grain */}
       <div className="film-grain" />
 
       <Header />
@@ -78,7 +98,7 @@ const Index = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1.5 }}
         >
           <MemoryCloud />
           <FMPortal />

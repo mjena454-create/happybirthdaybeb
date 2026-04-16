@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import memory1 from "@/assets/memory-1.jpg";
 import memory2 from "@/assets/memory-2.jpg";
 import memory3 from "@/assets/memory-3.jpg";
@@ -8,108 +8,111 @@ import memory5 from "@/assets/memory-5.jpg";
 import memory6 from "@/assets/memory-6.jpg";
 
 const memories = [
-  { id: 1, src: memory1, note: "The beginning of forever", rotate: -3, x: "5%", y: 0 },
-  { id: 2, src: memory2, note: "Golden hour, golden soul", rotate: 4, x: "55%", y: -40 },
-  { id: 3, src: memory3, note: "Where the sun kissed the sea", rotate: -2, x: "15%", y: 20 },
-  { id: 4, src: memory4, note: "Laughter is timeless", rotate: 5, x: "50%", y: -60 },
-  { id: 5, src: memory5, note: "A chapter worth rereading", rotate: -4, x: "8%", y: 30 },
-  { id: 6, src: memory6, note: "Stars aligned for you", rotate: 3, x: "52%", y: -20 },
+  { id: 1, src: memory1, note: "The beginning of forever", speed: 0.3, width: "45%", left: "2%", zIndex: 2 },
+  { id: 2, src: memory2, note: "Golden hour, golden soul", speed: 0.7, width: "35%", left: "55%", zIndex: 3 },
+  { id: 3, src: memory3, note: "Where the sun kissed the sea", speed: 0.15, width: "40%", left: "30%", zIndex: 1 },
+  { id: 4, src: memory4, note: "Laughter is timeless", speed: 0.55, width: "38%", left: "58%", zIndex: 4 },
+  { id: 5, src: memory5, note: "A chapter worth rereading", speed: 0.4, width: "42%", left: "5%", zIndex: 2 },
+  { id: 6, src: memory6, note: "Stars aligned for you", speed: 0.8, width: "36%", left: "50%", zIndex: 3 },
 ];
 
-const PolaroidCard = ({ memory, index }: { memory: typeof memories[0]; index: number }) => {
+const ParallaxPhoto = ({ memory, index }: { memory: typeof memories[0]; index: number }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { margin: "-30% 0px -30% 0px" });
-
-  const cardRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: cardRef,
+    target: ref,
     offset: ["start end", "end start"],
   });
 
-  const parallaxY = useTransform(scrollYProgress, [0, 1], [80 * (index % 2 === 0 ? 1 : -1), -80 * (index % 2 === 0 ? 1 : -1)]);
-  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [5, 0, -5]);
-  const rotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-3, 0, 3]);
+  // Different speed for each photo - creates the rushing effect
+  const y = useTransform(scrollYProgress, [0, 1], [200 * memory.speed, -200 * memory.speed]);
+  const rotate = useTransform(scrollYProgress, [0, 0.5, 1], [
+    -3 + index * 1.2,
+    0,
+    3 - index * 1.2,
+  ]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
+  const imgBlur = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [8, 2, 0, 2, 8]);
 
   return (
     <motion.div
-      ref={cardRef}
-      style={{ y: parallaxY }}
-      className="relative"
+      ref={ref}
+      style={{
+        y,
+        rotate,
+        scale,
+        width: memory.width,
+        marginLeft: memory.left,
+        zIndex: memory.zIndex,
+      }}
+      className="relative mb-[-5vh] group cursor-pointer"
     >
-      <motion.div
-        ref={ref}
-        initial={{ opacity: 0, y: 60 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-        viewport={{ once: true, margin: "-100px" }}
-        className="relative group cursor-pointer"
-        style={{
-          rotate: memory.rotate,
-          perspective: "1000px",
-        }}
-        whileHover={{ rotate: 0, scale: 1.05, zIndex: 20 }}
-      >
-        <motion.div
-          style={{ rotateX, rotateY }}
-          className="relative bg-secondary/50 p-3 pb-12 rounded-sm border border-border/50 shadow-xl shadow-background/50"
-        >
-          <div className="overflow-hidden">
-            <motion.img
-              src={memory.src}
-              alt={memory.note}
-              className="w-full h-auto object-cover transition-all duration-700"
-              style={{
-                filter: isInView ? "blur(0px) grayscale(0%)" : "blur(8px) grayscale(100%)",
-                transform: isInView ? "scale(1)" : "scale(1.1)",
-              }}
-            />
-          </div>
+      <div className="glass-card rounded-2xl p-2.5 pb-10 transition-transform duration-700">
+        <div className="overflow-hidden rounded-xl relative">
+          <motion.img
+            src={memory.src}
+            alt={memory.note}
+            className="w-full h-auto object-cover"
+            style={{
+              filter: useTransform(imgBlur, (v) => `blur(${v}px)`),
+            }}
+          />
 
-          {/* Silver-bordered caption on hover */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            className="absolute inset-3 inset-b-12 flex items-end justify-center p-6 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          {/* Hover overlay with caption */}
+          <div className="absolute inset-0 flex items-end justify-center p-4 opacity-0 group-hover:opacity-100 transition-all duration-700"
+            style={{ background: "linear-gradient(to top, hsla(222, 47%, 2%, 0.8), transparent 60%)" }}
           >
-            <div className="glass rounded-lg px-4 py-2 border border-primary/30">
-              <p className="font-heading text-xs italic text-foreground/80 tracking-wide text-center">
+            <div className="glass rounded-xl px-4 py-2.5" style={{ borderColor: "hsla(210, 20%, 72%, 0.2)" }}>
+              <p className="font-heading text-xs italic tracking-wide text-center" style={{ color: "hsl(var(--silver-light))" }}>
                 "{memory.note}"
               </p>
             </div>
-          </motion.div>
-
-          {/* Polaroid bottom text area */}
-          <div className="absolute bottom-3 left-3 right-3 h-8 flex items-center justify-center">
-            <p className="font-body text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
-              memory {memory.id}
-            </p>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+
+        {/* Polaroid label */}
+        <div className="absolute bottom-2.5 left-2.5 right-2.5 h-7 flex items-center justify-center">
+          <p className="text-[9px] tracking-[0.25em] uppercase" style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark) / 0.4)" }}>
+            memory · {String(memory.id).padStart(2, "0")}
+          </p>
+        </div>
+      </div>
     </motion.div>
   );
 };
 
 const MemoryCloud = () => {
   return (
-    <section id="memories" className="relative py-32 px-6 overflow-hidden">
+    <section id="memories" className="relative py-20 overflow-hidden">
+      {/* Section header */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="text-center mb-20"
+        transition={{ duration: 1.5 }}
+        className="text-center mb-24 px-6"
       >
-        <p className="font-body text-xs tracking-[0.5em] text-muted-foreground uppercase mb-4">
+        <p className="text-[10px] tracking-[0.6em] uppercase mb-5"
+          style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark) / 0.4)" }}
+        >
           The Memory Cloud
         </p>
-        <h2 className="font-heading text-4xl md:text-5xl font-light text-silver-gradient">
+        <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light text-silver-gradient">
           Moments Worth Keeping
         </h2>
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="w-12 h-px mx-auto mt-6"
+          style={{ background: "linear-gradient(90deg, transparent, hsl(var(--silver) / 0.3), transparent)" }}
+        />
       </motion.div>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
+      {/* Scattered gallery */}
+      <div className="max-w-4xl mx-auto px-6">
         {memories.map((memory, i) => (
-          <PolaroidCard key={memory.id} memory={memory} index={i} />
+          <ParallaxPhoto key={memory.id} memory={memory} index={i} />
         ))}
       </div>
     </section>
