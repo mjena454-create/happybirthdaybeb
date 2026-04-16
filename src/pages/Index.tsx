@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import HeroSection from "@/components/HeroSection";
@@ -9,8 +8,7 @@ import CelebrationRoom from "@/components/CelebrationRoom";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
-  const [entered, setEntered] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
+  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.28 });
 
   useEffect(() => {
     const sections = ["home", "memories", "fm", "celebration"];
@@ -22,7 +20,7 @@ const Index = () => {
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.28 }
     );
 
     sections.forEach((id) => {
@@ -31,7 +29,7 @@ const Index = () => {
     });
 
     return () => observer.disconnect();
-  }, [entered]);
+  }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     setMousePos({
@@ -41,70 +39,45 @@ const Index = () => {
   }, []);
 
   const handleNavigate = (section: string) => {
-    if (!entered && section !== "home") {
-      setEntered(true);
-      setTimeout(() => {
-        const el = document.getElementById(section);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } else {
-      const el = document.getElementById(section);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }
+    const el = document.getElementById(section);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const handleEnter = () => {
-    setEntered(true);
-    setTimeout(() => {
-      const el = document.getElementById("memories");
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 300);
+    const el = document.getElementById("memories");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
-    <div
-      className="relative min-h-screen overflow-x-hidden"
-      style={{ background: "hsl(var(--midnight))" }}
-      onMouseMove={handleMouseMove}
-    >
-      {/* Interactive gradient background */}
+    <div className="relative min-h-screen overflow-x-hidden bg-background" onMouseMove={handleMouseMove}>
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse 800px 600px at ${mousePos.x * 100}% ${mousePos.y * 100}%, hsla(220, 60%, 55%, 0.06) 0%, transparent 70%),
-            radial-gradient(ellipse 600px 400px at ${100 - mousePos.x * 100}% ${100 - mousePos.y * 100}%, hsla(210, 20%, 72%, 0.03) 0%, transparent 70%),
-            hsl(var(--midnight))
+            radial-gradient(ellipse 720px 420px at ${mousePos.x * 100}% ${mousePos.y * 100}%, hsla(218, 56%, 56%, 0.12) 0%, transparent 58%),
+            radial-gradient(ellipse 880px 480px at 50% 0%, hsla(210, 24%, 93%, 0.09) 0%, transparent 56%),
+            linear-gradient(180deg, hsl(var(--midnight-light)) 0%, hsl(var(--midnight)) 58%, hsl(var(--background)) 100%)
           `,
-          transition: "background 0.3s ease-out",
         }}
       />
 
-      {/* Subtle vignette */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at center, transparent 40%, hsla(222, 47%, 1%, 0.5) 100%)",
+          background: "linear-gradient(180deg, hsla(210, 24%, 93%, 0.03) 0%, transparent 26%, transparent 74%, hsla(222, 40%, 4%, 0.18) 100%)",
         }}
       />
 
-      {/* Film grain */}
       <div className="film-grain" />
 
       <Header />
-      <HeroSection onEnter={handleEnter} />
 
-      {entered && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5 }}
-        >
-          <MemoryCloud />
-          <FMPortal />
-          <CelebrationRoom />
-        </motion.div>
-      )}
+      <main className="relative z-10">
+        <HeroSection onEnter={handleEnter} />
+        <MemoryCloud />
+        <FMPortal />
+        <CelebrationRoom />
+      </main>
 
       <BottomNav activeSection={activeSection} onNavigate={handleNavigate} />
     </div>
