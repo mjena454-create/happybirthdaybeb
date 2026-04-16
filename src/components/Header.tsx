@@ -10,21 +10,32 @@ const Header = () => {
   }, []);
 
   const formatTime = (d: Date) =>
-    d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
+    d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.5, delay: 0.5 }}
+      className="fixed top-0 left-0 right-0 z-50 pointer-events-none"
     >
-      <span className="font-heading text-sm tracking-[0.3em] text-foreground/50 uppercase">
-        Sanjana Vol. 19
-      </span>
-      <span className="font-body text-xs tracking-widest text-muted-foreground tabular-nums">
-        {formatTime(time)}
-      </span>
+      <div className="flex items-center justify-between px-6 md:px-10 py-5">
+        <div className="flex items-center gap-3">
+          <div className="w-1.5 h-1.5 rounded-full bg-cobalt animate-pulse" style={{ boxShadow: "0 0 8px hsl(var(--cobalt))" }} />
+          <span
+            className="text-[10px] tracking-[0.4em] uppercase"
+            style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark))" }}
+          >
+            Sanjana · XIX
+          </span>
+        </div>
+        <span
+          className="text-[10px] tracking-[0.3em] tabular-nums"
+          style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark) / 0.6)" }}
+        >
+          {formatTime(time)}
+        </span>
+      </div>
     </motion.header>
   );
 };
