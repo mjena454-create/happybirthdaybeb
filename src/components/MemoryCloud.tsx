@@ -8,112 +8,94 @@ import memory5 from "@/assets/memory-5.jpg";
 import memory6 from "@/assets/memory-6.jpg";
 
 const memories = [
-  { id: 1, src: memory1, note: "The beginning of forever", speed: 0.3, width: "45%", left: "2%", zIndex: 2 },
-  { id: 2, src: memory2, note: "Golden hour, golden soul", speed: 0.7, width: "35%", left: "55%", zIndex: 3 },
-  { id: 3, src: memory3, note: "Where the sun kissed the sea", speed: 0.15, width: "40%", left: "30%", zIndex: 1 },
-  { id: 4, src: memory4, note: "Laughter is timeless", speed: 0.55, width: "38%", left: "58%", zIndex: 4 },
-  { id: 5, src: memory5, note: "A chapter worth rereading", speed: 0.4, width: "42%", left: "5%", zIndex: 2 },
-  { id: 6, src: memory6, note: "Stars aligned for you", speed: 0.8, width: "36%", left: "50%", zIndex: 3 },
+  { id: 1, src: memory1, note: "The beginning of forever", rotate: -4, speed: 0.2, width: "md:w-[58%]", align: "md:mr-auto" },
+  { id: 2, src: memory2, note: "Golden hour, golden soul", rotate: 3, speed: 0.45, width: "md:w-[44%]", align: "md:ml-auto" },
+  { id: 3, src: memory3, note: "Where the sun kissed the sea", rotate: -3, speed: 0.3, width: "md:w-[52%]", align: "md:ml-[12%]" },
+  { id: 4, src: memory4, note: "Laughter is timeless", rotate: 4, speed: 0.55, width: "md:w-[46%]", align: "md:mr-[8%]" },
+  { id: 5, src: memory5, note: "A chapter worth rereading", rotate: -2, speed: 0.28, width: "md:w-[60%]", align: "md:mr-auto" },
+  { id: 6, src: memory6, note: "Stars aligned for you", rotate: 3, speed: 0.5, width: "md:w-[42%]", align: "md:ml-auto" },
 ];
 
-const ParallaxPhoto = ({ memory, index }: { memory: typeof memories[0]; index: number }) => {
+const GalleryCard = ({ memory, index }: { memory: typeof memories[number]; index: number }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
 
-  // Different speed for each photo - creates the rushing effect
-  const y = useTransform(scrollYProgress, [0, 1], [200 * memory.speed, -200 * memory.speed]);
-  const rotate = useTransform(scrollYProgress, [0, 0.5, 1], [
-    -3 + index * 1.2,
-    0,
-    3 - index * 1.2,
-  ]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
-  const imgBlur = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [8, 2, 0, 2, 8]);
+  const y = useTransform(scrollYProgress, [0, 1], [140 * memory.speed, -180 * memory.speed]);
+  const rotate = useTransform(scrollYProgress, [0, 0.5, 1], [memory.rotate, 0, -memory.rotate * 0.4]);
+  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [5, 0, -3]);
+  const blur = useTransform(scrollYProgress, [0, 0.35, 0.5, 0.65, 1], [6, 2, 0, 2, 6]);
+  const blurFilter = useTransform(blur, (value) => `blur(${value}px)`);
 
   return (
-    <motion.div
+    <motion.figure
       ref={ref}
-      style={{
-        y,
-        rotate,
-        scale,
-        width: memory.width,
-        marginLeft: memory.left,
-        zIndex: memory.zIndex,
-      }}
-      className="relative mb-[-5vh] group cursor-pointer"
+      style={{ y, rotate, rotateX, transformPerspective: 1200 }}
+      className={`relative w-full ${memory.width} ${memory.align} group`}
     >
-      <div className="glass-card rounded-2xl p-2.5 pb-10 transition-transform duration-700">
-        <div className="overflow-hidden rounded-xl relative">
-          <motion.img
-            src={memory.src}
-            alt={memory.note}
-            className="w-full h-auto object-cover"
-            style={{
-              filter: useTransform(imgBlur, (v) => `blur(${v}px)`),
-            }}
-          />
+      <div className="glass-card rounded-[30px] p-3 md:p-4">
+        <div className="relative overflow-hidden rounded-[22px]">
+          <motion.img src={memory.src} alt={memory.note} className="w-full h-auto object-cover" style={{ filter: blurFilter }} />
 
-          {/* Hover overlay with caption */}
-          <div className="absolute inset-0 flex items-end justify-center p-4 opacity-0 group-hover:opacity-100 transition-all duration-700"
-            style={{ background: "linear-gradient(to top, hsla(222, 47%, 2%, 0.8), transparent 60%)" }}
-          >
-            <div className="glass rounded-xl px-4 py-2.5" style={{ borderColor: "hsla(210, 20%, 72%, 0.2)" }}>
-              <p className="font-heading text-xs italic tracking-wide text-center" style={{ color: "hsl(var(--silver-light))" }}>
-                "{memory.note}"
-              </p>
-            </div>
-          </div>
+          <div
+            className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            style={{ background: "linear-gradient(180deg, transparent 40%, hsla(222, 34%, 10%, 0.72) 100%)" }}
+          />
         </div>
 
-        {/* Polaroid label */}
-        <div className="absolute bottom-2.5 left-2.5 right-2.5 h-7 flex items-center justify-center">
-          <p className="text-[9px] tracking-[0.25em] uppercase" style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark) / 0.4)" }}>
-            memory · {String(memory.id).padStart(2, "0")}
-          </p>
+        <figcaption className="absolute inset-x-7 bottom-7 translate-y-3 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="glass rounded-2xl px-4 py-3">
+            <p className="text-center font-heading text-sm italic" style={{ color: "hsl(var(--silver-light))" }}>
+              “{memory.note}”
+            </p>
+          </div>
+        </figcaption>
+
+        <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+          <span
+            className="text-[9px] uppercase tracking-[0.28em]"
+            style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark))" }}
+          >
+            memory {String(index + 1).padStart(2, "0")}
+          </span>
         </div>
       </div>
-    </motion.div>
+    </motion.figure>
   );
 };
 
 const MemoryCloud = () => {
   return (
-    <section id="memories" className="relative py-20 overflow-hidden">
-      {/* Section header */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.5 }}
-        className="text-center mb-24 px-6"
-      >
-        <p className="text-[10px] tracking-[0.6em] uppercase mb-5"
-          style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark) / 0.4)" }}
-        >
-          The Memory Cloud
-        </p>
-        <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light text-silver-gradient">
-          Moments Worth Keeping
-        </h2>
+    <section id="memories" className="relative px-6 py-24 md:py-32">
+      <div className="mx-auto max-w-5xl">
         <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="w-12 h-px mx-auto mt-6"
-          style={{ background: "linear-gradient(90deg, transparent, hsl(var(--silver) / 0.3), transparent)" }}
-        />
-      </motion.div>
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-16 text-center md:mb-24"
+        >
+          <p
+            className="mb-4 text-[10px] uppercase tracking-[0.55em]"
+            style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark))" }}
+          >
+            The Gallery
+          </p>
+          <h2 className="font-heading text-4xl font-light text-silver-gradient md:text-5xl lg:text-6xl">
+            Moments Worth Keeping
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 md:text-base" style={{ color: "hsl(var(--foreground) / 0.7)" }}>
+            A scattered memory wall drifting at different speeds — intimate, tactile, and alive as she scrolls.
+          </p>
+        </motion.div>
 
-      {/* Scattered gallery */}
-      <div className="max-w-4xl mx-auto px-6">
-        {memories.map((memory, i) => (
-          <ParallaxPhoto key={memory.id} memory={memory} index={i} />
-        ))}
+        <div className="space-y-10 md:space-y-[-2vh]">
+          {memories.map((memory, index) => (
+            <GalleryCard key={memory.id} memory={memory} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   );
