@@ -5,6 +5,8 @@ import HeroSection from "@/components/HeroSection";
 import MemoryCloud from "@/components/MemoryCloud";
 import FMPortal from "@/components/FMPortal";
 import CelebrationRoom from "@/components/CelebrationRoom";
+import CursorAura from "@/components/CursorAura";
+import ScrollProgress from "@/components/ScrollProgress";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -70,6 +72,8 @@ const Index = () => {
 
       <div className="film-grain" />
 
+      <CursorAura />
+      <ScrollProgress />
       <Header />
 
       <main className="relative z-10">
