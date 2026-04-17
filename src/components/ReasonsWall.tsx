@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const REASONS = [
   "the way you laugh at your own jokes first",
-  "your "i'm fine" voicenote that means you're not",
+  `your "i'm fine" voicenote that means you're not`,
   "how you remember everyone's tiny details",
   "the playlists only you could've made",
   "your 2am philosophy era",
-  "the way you say "okayyy" when excited",
+  `the way you say "okayyy" when excited`,
   "how the room softens when you walk in",
   "your hand-on-heart honesty",
   "the chai you'd choose over coffee",
@@ -17,9 +17,9 @@ const REASONS = [
   "your taste in songs nobody else has heard",
   "your hugs — calibrated to fix anything",
   "how unapologetically you you are",
-  "your soft "wait what" mid-sentence",
+  `your soft "wait what" mid-sentence`,
   "the gentle drama of your overthinking",
-  "the way you make 'happy birthday' feel earned",
+  `the way you make "happy birthday" feel earned`,
   "every chapter still left to write ✦",
 ];
 
