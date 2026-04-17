@@ -7,6 +7,11 @@ import FMPortal from "@/components/FMPortal";
 import CelebrationRoom from "@/components/CelebrationRoom";
 import CursorAura from "@/components/CursorAura";
 import ScrollProgress from "@/components/ScrollProgress";
+import SparkleClick from "@/components/SparkleClick";
+import FortuneCookie from "@/components/FortuneCookie";
+import SecretCake from "@/components/SecretCake";
+import FunStats from "@/components/FunStats";
+import ReasonsWall from "@/components/ReasonsWall";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -74,11 +79,16 @@ const Index = () => {
 
       <CursorAura />
       <ScrollProgress />
+      <SparkleClick />
+      <FortuneCookie />
+      <SecretCake />
       <Header />
 
       <main className="relative z-10">
         <HeroSection onEnter={handleEnter} />
+        <FunStats />
         <MemoryCloud />
+        <ReasonsWall />
         <FMPortal />
         <CelebrationRoom />
       </main>
