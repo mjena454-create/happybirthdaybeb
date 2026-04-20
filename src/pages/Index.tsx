@@ -12,6 +12,8 @@ import FortuneCookie from "@/components/FortuneCookie";
 import SecretCake from "@/components/SecretCake";
 import FunStats from "@/components/FunStats";
 import ReasonsWall from "@/components/ReasonsWall";
+import AmbientPlayer from "@/components/AmbientPlayer";
+import KonamiSecret from "@/components/KonamiSecret";
 import { SmoothScrollProvider, useSmoothScroll } from "@/components/scroll/SmoothScrollProvider";
 import SectionReveal from "@/components/scroll/SectionReveal";
 import ScrollVelocity from "@/components/scroll/ScrollVelocity";
@@ -79,6 +81,8 @@ const IndexInner = () => {
       <SparkleClick />
       <FortuneCookie />
       <SecretCake />
+      <AmbientPlayer />
+      <KonamiSecret />
       <Header />
 
       <main className="relative z-10">

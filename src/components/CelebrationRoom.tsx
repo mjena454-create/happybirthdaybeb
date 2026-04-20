@@ -127,7 +127,7 @@ const CelebrationRoom = () => {
       </div>
 
       {/* Letter */}
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-28">
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-20 sm:px-6 md:py-28">
         <motion.div
           ref={letterRef}
           initial={{ opacity: 0, y: 32 }}
@@ -181,7 +181,7 @@ const CelebrationRoom = () => {
       </div>
 
       {/* Kinetic title */}
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-6">
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-5 sm:px-6">
         <motion.div style={{ y: titleY, opacity: titleOpacity, scale: titleScale }} className="text-center">
           <p
             className="mb-5 text-[10px] uppercase tracking-[0.55em]"
@@ -198,7 +198,7 @@ const CelebrationRoom = () => {
       </div>
 
       {/* Wish jar + reveal */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 pb-28">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 pb-32 sm:px-6 md:pb-28">
         {!revealed ? (
           <motion.div
             initial={{ opacity: 0, y: 28 }}

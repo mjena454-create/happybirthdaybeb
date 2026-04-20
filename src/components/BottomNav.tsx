@@ -15,12 +15,12 @@ const navItems = [
 
 const BottomNav = ({ activeSection, onNavigate }: BottomNavProps) => {
   return (
-    <div className="fixed inset-x-0 bottom-5 z-50 flex justify-center px-4">
+    <div className="fixed inset-x-0 bottom-3 z-50 flex justify-center px-3 md:bottom-5 md:px-4">
       <motion.nav
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="glass-nav pointer-events-auto flex w-max max-w-full items-center gap-1 rounded-full px-2 py-2"
+        className="glass-nav pointer-events-auto flex w-max max-w-[96vw] items-center gap-0.5 rounded-full px-1.5 py-1.5 md:gap-1 md:px-2 md:py-2"
       >
         {navItems.map((item) => {
           const isActive = activeSection === item.id;
@@ -29,7 +29,7 @@ const BottomNav = ({ activeSection, onNavigate }: BottomNavProps) => {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className="relative flex min-w-[74px] flex-col items-center justify-center gap-1 rounded-full px-4 py-3 transition-all duration-500"
+              className="relative flex min-w-[60px] flex-col items-center justify-center gap-1 rounded-full px-3 py-2.5 transition-all duration-500 md:min-w-[74px] md:px-4 md:py-3"
               style={{
                 background: isActive ? "hsla(210, 24%, 93%, 0.08)" : "transparent",
                 border: isActive ? "1px solid hsla(210, 18%, 82%, 0.16)" : "1px solid transparent",
@@ -45,7 +45,7 @@ const BottomNav = ({ activeSection, onNavigate }: BottomNavProps) => {
                 }}
               />
               <span
-                className="text-[9px] uppercase tracking-[0.24em]"
+                className="text-[8px] uppercase tracking-[0.18em] md:text-[9px] md:tracking-[0.24em]"
                 style={{
                   fontFamily: "var(--font-mono)",
                   color: isActive ? "hsl(var(--silver-light))" : "hsl(var(--silver-dark))",

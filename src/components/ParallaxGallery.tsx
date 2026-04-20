@@ -100,7 +100,7 @@ const ParallaxGallery = () => {
   const titleLetter = useTransform(scrollYProgress, [0, 1], ["0.18em", "0.42em"]);
 
   return (
-    <section id="memories" ref={wrapRef} className="relative px-4 py-24 md:px-8 md:py-32">
+    <section id="memories" ref={wrapRef} className="relative px-3 py-20 sm:px-4 md:px-8 md:py-32">
       {/* sticky kinetic title that "follows" while you scroll the wall */}
       <div className="pointer-events-none sticky top-0 z-10 -mb-[40vh] flex h-[40vh] items-end justify-center">
         <motion.div
@@ -129,7 +129,7 @@ const ParallaxGallery = () => {
       </div>
 
       {/* the wall */}
-      <div className="relative mx-auto max-w-7xl pt-[42vh]">
+      <div className="relative mx-auto max-w-7xl pt-[36vh] md:pt-[42vh]">
         {/* soft top + bottom fade so columns feel they emerge from the dark */}
         <div
           className="pointer-events-none absolute inset-x-0 top-0 z-20 h-40"
@@ -140,7 +140,7 @@ const ParallaxGallery = () => {
           style={{ background: "linear-gradient(0deg, hsl(var(--background)) 0%, transparent 100%)" }}
         />
 
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-7">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-4 md:gap-7">
           {COLUMNS.map((col, i) => (
             <div key={i} className={i % 2 === 1 ? "md:translate-y-12" : ""}>
               <Column frames={col.frames} speed={col.speed} scrollYProgress={scrollYProgress} />

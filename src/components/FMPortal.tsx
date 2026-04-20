@@ -84,7 +84,7 @@ const FMPortal = () => {
 
   return (
     <>
-      <section id="fm" className="relative px-6 py-32">
+      <section id="fm" className="relative px-4 py-20 sm:px-6 md:py-32">
         <div className="mx-auto max-w-xl">
           <motion.div
             initial={{ opacity: 0, y: 60 }}
