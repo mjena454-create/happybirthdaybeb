@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import HeroSection from "@/components/HeroSection";
-import MemoryCloud from "@/components/MemoryCloud";
+import ParallaxGallery from "@/components/ParallaxGallery";
 import FMPortal from "@/components/FMPortal";
 import CelebrationRoom from "@/components/CelebrationRoom";
 import CursorAura from "@/components/CursorAura";
@@ -85,7 +85,7 @@ const IndexInner = () => {
         <HeroSection onEnter={handleEnter} />
         <SectionReveal><FunStats /></SectionReveal>
         <ScrollVelocity text="SANJANA · NINETEEN · MMXXV ·" />
-        <SectionReveal><MemoryCloud /></SectionReveal>
+        <ParallaxGallery />
         <SectionReveal><ReasonsWall /></SectionReveal>
         <ScrollVelocity text="✦ MADE WITH LOVE · FOR YOU ONLY ·" baseSpeed={0.3} />
         <SectionReveal><FMPortal /></SectionReveal>
