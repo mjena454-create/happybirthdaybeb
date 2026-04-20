@@ -75,6 +75,7 @@ const IndexInner = () => {
       />
 
       <div className="film-grain" />
+      <div className="vignette" />
 
       <CursorAura />
       <ScrollProgress />

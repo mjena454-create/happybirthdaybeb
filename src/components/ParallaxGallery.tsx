@@ -122,9 +122,10 @@ const ParallaxGallery = () => {
               The Wall · 24 frames · scroll slowly
             </span>
           </motion.p>
-          <h2 className="font-heading text-5xl font-light leading-[0.95] text-silver-shimmer md:text-7xl lg:text-[6rem]">
+          <h2 className="font-heading text-5xl font-light leading-[0.95] text-aurora md:text-7xl lg:text-[6rem]">
             Moments, layered.
           </h2>
+          <div className="premium-divider mx-auto mt-6 w-24" />
         </motion.div>
       </div>
 

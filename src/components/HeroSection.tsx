@@ -52,6 +52,19 @@ const HeroSection = ({ onEnter }: HeroSectionProps) => {
             animate={{ opacity: [0.35, 0.6, 0.35], scale: [1, 1.06, 1] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           />
+          {/* slow drifting orbs for depth */}
+          <motion.div
+            className="absolute left-[8%] top-[18%] h-40 w-40 rounded-full"
+            style={{ background: "radial-gradient(circle, hsla(210, 24%, 93%, 0.16), transparent 70%)", filter: "blur(30px)" }}
+            animate={{ x: [0, 30, -10, 0], y: [0, -22, 14, 0], opacity: [0.4, 0.7, 0.5, 0.4] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute right-[6%] bottom-[14%] h-56 w-56 rounded-full"
+            style={{ background: "radial-gradient(circle, hsla(218, 74%, 66%, 0.18), transparent 72%)", filter: "blur(40px)" }}
+            animate={{ x: [0, -24, 12, 0], y: [0, 18, -10, 0], opacity: [0.35, 0.6, 0.45, 0.35] }}
+            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+          />
         </div>
 
         <motion.div
@@ -70,7 +83,7 @@ const HeroSection = ({ onEnter }: HeroSectionProps) => {
             A Birthday Sanctuary · Vol. 19
           </motion.p>
 
-          <h1 className="font-heading text-[5.5rem] leading-none tracking-tight text-silver-shimmer sm:text-[7rem] md:text-[10rem] lg:text-[13rem]">
+          <h1 className="font-heading text-[5.5rem] leading-none tracking-tight text-aurora sm:text-[7rem] md:text-[10rem] lg:text-[13rem]" style={{ textShadow: "0 0 40px hsla(218, 56%, 56%, 0.18)" }}>
             XIX
           </h1>
 

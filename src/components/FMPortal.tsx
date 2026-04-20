@@ -148,7 +148,7 @@ const FMPortal = () => {
               </p>
 
               <div className="relative mb-1">
-                <h2 className="font-heading text-5xl font-light tracking-wider text-silver-shimmer md:text-6xl">19.0</h2>
+                <h2 className="font-heading text-5xl font-light tracking-wider text-aurora md:text-6xl">19.0</h2>
                 <span
                   className="text-[10px] uppercase tracking-[0.3em]"
                   style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark) / 0.5)" }}

@@ -160,6 +160,38 @@
       inset 0 1px 0 hsla(var(--silver-light) / 0.1);
   }
 
+  /* Premium accent utilities */
+  .premium-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--silver) / 0.45), transparent);
+    box-shadow: 0 0 14px hsl(var(--silver) / 0.18);
+  }
+
+  .text-aurora {
+    background: linear-gradient(
+      120deg,
+      hsl(var(--silver-light)) 0%,
+      hsl(var(--cobalt-glow)) 38%,
+      hsl(var(--silver-light)) 62%,
+      hsl(var(--silver)) 100%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 7s ease-in-out infinite;
+  }
+
+  .vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 35;
+    background:
+      radial-gradient(ellipse 110% 80% at 50% 50%, transparent 55%, hsla(222, 40%, 4%, 0.55) 100%),
+      radial-gradient(ellipse 60% 40% at 50% 0%, hsla(218, 56%, 56%, 0.06), transparent 70%);
+  }
+
   .radio-glass {
     background: hsla(222 24% 15% / 0.78);
     backdrop-filter: blur(40px) saturate(1.2);
