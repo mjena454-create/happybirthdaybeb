@@ -36,7 +36,7 @@ const HeroSection = ({ onEnter }: HeroSectionProps) => {
 
   return (
     <>
-      <section id="home" className="relative flex min-h-screen items-center justify-center overflow-hidden px-6">
+      <section id="home" className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-5 sm:px-6">
         <div className="absolute inset-0 pointer-events-none">
           <div
             className="absolute inset-x-0 top-0 h-[46vh]"
@@ -70,11 +70,11 @@ const HeroSection = ({ onEnter }: HeroSectionProps) => {
             A Birthday Sanctuary · Vol. 19
           </motion.p>
 
-          <h1 className="font-heading text-[7rem] leading-none tracking-tight text-silver-shimmer md:text-[10rem] lg:text-[13rem]">
+          <h1 className="font-heading text-[5.5rem] leading-none tracking-tight text-silver-shimmer sm:text-[7rem] md:text-[10rem] lg:text-[13rem]">
             XIX
           </h1>
 
-          <div className="mt-5 flex items-baseline justify-center gap-[2px] font-heading text-2xl italic md:text-3xl">
+          <div className="mt-5 flex items-baseline justify-center gap-[2px] font-heading text-xl italic sm:text-2xl md:text-3xl">
             {NAME.split("").map((char, i) => (
               <motion.span
                 key={i}
