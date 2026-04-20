@@ -12,10 +12,14 @@ import FortuneCookie from "@/components/FortuneCookie";
 import SecretCake from "@/components/SecretCake";
 import FunStats from "@/components/FunStats";
 import ReasonsWall from "@/components/ReasonsWall";
+import { SmoothScrollProvider, useSmoothScroll } from "@/components/scroll/SmoothScrollProvider";
+import SectionReveal from "@/components/scroll/SectionReveal";
+import ScrollVelocity from "@/components/scroll/ScrollVelocity";
 
-const Index = () => {
+const IndexInner = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.28 });
+  const { scrollTo } = useSmoothScroll();
 
   useEffect(() => {
     const sections = ["home", "memories", "fm", "celebration"];
@@ -45,15 +49,8 @@ const Index = () => {
     });
   }, []);
 
-  const handleNavigate = (section: string) => {
-    const el = document.getElementById(section);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const handleEnter = () => {
-    const el = document.getElementById("memories");
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+  const handleNavigate = (section: string) => scrollTo(section, { offset: -10, duration: 1.8 });
+  const handleEnter = () => scrollTo("memories", { offset: -10, duration: 2.0 });
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background" onMouseMove={handleMouseMove}>
@@ -86,16 +83,24 @@ const Index = () => {
 
       <main className="relative z-10">
         <HeroSection onEnter={handleEnter} />
-        <FunStats />
-        <MemoryCloud />
-        <ReasonsWall />
-        <FMPortal />
-        <CelebrationRoom />
+        <SectionReveal><FunStats /></SectionReveal>
+        <ScrollVelocity text="SANJANA · NINETEEN · MMXXV ·" />
+        <SectionReveal><MemoryCloud /></SectionReveal>
+        <SectionReveal><ReasonsWall /></SectionReveal>
+        <ScrollVelocity text="✦ MADE WITH LOVE · FOR YOU ONLY ·" baseSpeed={0.3} />
+        <SectionReveal><FMPortal /></SectionReveal>
+        <SectionReveal><CelebrationRoom /></SectionReveal>
       </main>
 
       <BottomNav activeSection={activeSection} onNavigate={handleNavigate} />
     </div>
   );
 };
+
+const Index = () => (
+  <SmoothScrollProvider>
+    <IndexInner />
+  </SmoothScrollProvider>
+);
 
 export default Index;
