@@ -6,19 +6,39 @@ import memory3 from "@/assets/memory-3.jpg";
 import memory4 from "@/assets/memory-4.jpg";
 import memory5 from "@/assets/memory-5.jpg";
 import memory6 from "@/assets/memory-6.jpg";
+import photo1 from "@/assets/photo 1";
+import photo2 from "@/assets/photo 2";
+import photo3 from "@/assets/photo 3";
+import photo4 from "@/assets/photo 4";
+import photo5 from "@/assets/photo 5";
+import photo6 from "@/assets/photo 6";
+import photo7 from "@/assets/photo 7";
+import photo8 from "@/assets/photo 8";
+import photo9 from "@/assets/photo 9";
+import photo10 from "@/assets/photo 10";
+import photo11 from "@/assets/photo 11";
+import photo12 from "@/assets/photo 12";
+import photo13 from "@/assets/photo 13";
+import photo14 from "@/assets/photo 14";
+import photo15 from "@/assets/photo 15";
+import photo16 from "@/assets/photo 16";
+import photo17 from "@/assets/photo 17";
+import photo18 from "@/assets/photo 18";
+import photo19 from "@/assets/photo 19";
+import photo20 from "@/assets/photo 20";
+import photo21 from "@/assets/photo 21";
+import photo22 from "@/assets/photo 22";
+import photo23 from "@/assets/photo 23";
+import photo24 from "@/assets/photo 24";
 
 type Frame = { src: string; note: string; date: string; ratio: string };
 
-// 👇 ADD YOUR 24 PHOTOS HERE
-// 1. Drop your photos into src/assets/  (name them photo-01.jpg ... photo-24.jpg)
-// 2. Import each one below.
-// 3. Edit the `note` (caption) and `date` fields freely.
-// Until you replace them, the 6 placeholder photos cycle so the wall still looks full.
-const PH = [memory1, memory2, memory3, memory4, memory5, memory6];
+// 24 Photos Gallery
+const PH = [photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10, photo11, photo12, photo13, photo14, photo15, photo16, photo17, photo18, photo19, photo20, photo21, photo22, photo23, photo24];
 const ratios = ["aspect-[3/4]", "aspect-[4/5]", "aspect-[1/1]", "aspect-[3/4]"];
 
 const FRAMES: Frame[] = Array.from({ length: 24 }, (_, i) => ({
-  src: PH[i % PH.length],
+  src: PH[i],
   note: [
     "The beginning of forever", "Golden hour, golden soul", "Where the sun kissed sea",
     "Laughter is timeless", "A chapter worth rereading", "Stars aligned for you",
