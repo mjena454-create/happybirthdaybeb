@@ -1,11 +1,5 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
-import memory1 from "@/assets/memory-1.png";
-import memory2 from "@/assets/memory-2.jpg";
-import memory3 from "@/assets/memory-3.jpg";
-import memory4 from "@/assets/memory-4.jpg";
-import memory5 from "@/assets/memory-5.jpg";
-import memory6 from "@/assets/memory-6.jpg";
 import photo1 from "@/assets/photo 1";
 import photo2 from "@/assets/photo 2";
 import photo3 from "@/assets/photo 3";
