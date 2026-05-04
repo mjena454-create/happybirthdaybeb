@@ -9,24 +9,36 @@ import memory6 from "@/assets/memory-6.jpg";
 
 type Frame = { src: string; note: string; date: string; ratio: string };
 
-const POOL: Frame[] = [
-  { src: memory1, note: "The beginning of forever",  date: "MMXXIV · 03", ratio: "aspect-[3/4]" },
-  { src: memory2, note: "Golden hour, golden soul",  date: "MMXXIV · 06", ratio: "aspect-[4/5]" },
-  { src: memory3, note: "Where the sun kissed sea",  date: "MMXXIV · 08", ratio: "aspect-[1/1]" },
-  { src: memory4, note: "Laughter is timeless",      date: "MMXXIV · 09", ratio: "aspect-[3/4]" },
-  { src: memory5, note: "A chapter worth rereading", date: "MMXXIV · 11", ratio: "aspect-[4/5]" },
-  { src: memory6, note: "Stars aligned for you",     date: "MMXXV · 02",  ratio: "aspect-[3/4]" },
-];
+// 👇 ADD YOUR 24 PHOTOS HERE
+// 1. Drop your photos into src/assets/  (name them photo-01.jpg ... photo-24.jpg)
+// 2. Import each one below.
+// 3. Edit the `note` (caption) and `date` fields freely.
+// Until you replace them, the 6 placeholder photos cycle so the wall still looks full.
+const PH = [memory1, memory2, memory3, memory4, memory5, memory6];
+const ratios = ["aspect-[3/4]", "aspect-[4/5]", "aspect-[1/1]", "aspect-[3/4]"];
 
-// Build columns by repeating + shuffling the pool so the wall feels dense
-const buildColumn = (offset: number, count: number): Frame[] =>
-  Array.from({ length: count }, (_, i) => POOL[(i + offset) % POOL.length]);
+const FRAMES: Frame[] = Array.from({ length: 24 }, (_, i) => ({
+  src: PH[i % PH.length],
+  note: [
+    "The beginning of forever", "Golden hour, golden soul", "Where the sun kissed sea",
+    "Laughter is timeless", "A chapter worth rereading", "Stars aligned for you",
+    "That smile, framed", "Quiet little universe", "Midnight, but warm",
+    "You, in slow motion", "Soft chaos", "Lighthouse moments",
+    "Frame twelve, still you", "Salt, sun, you", "Unscripted",
+    "A favorite Sunday", "Pocket-sized magic", "Held the light",
+    "City lights, your eyes", "Whispered jokes", "Sky on your side",
+    "All of it, again", "Another year, brighter", "And the next, and the next",
+  ][i],
+  date: `MMXXV · ${String((i % 12) + 1).padStart(2, "0")}`,
+  ratio: ratios[i % ratios.length],
+}));
 
+// Distribute the 24 frames across 4 parallax columns (6 each)
 const COLUMNS: { speed: number; frames: Frame[]; align: "start" | "center" | "end" }[] = [
-  { speed: -340, frames: buildColumn(0, 6), align: "start" },
-  { speed: -120, frames: buildColumn(2, 6), align: "center" },
-  { speed: -480, frames: buildColumn(4, 6), align: "end" },
-  { speed: -200, frames: buildColumn(1, 6), align: "center" },
+  { speed: -340, frames: FRAMES.slice(0, 6),   align: "start"  },
+  { speed: -120, frames: FRAMES.slice(6, 12),  align: "center" },
+  { speed: -480, frames: FRAMES.slice(12, 18), align: "end"    },
+  { speed: -200, frames: FRAMES.slice(18, 24), align: "center" },
 ];
 
 const Polaroid = ({ frame, y }: { frame: Frame; y: MotionValue<number> }) => {
