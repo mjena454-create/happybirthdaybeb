@@ -1,15 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Radio, Wifi, Volume2, Disc3 } from "lucide-react";
+import { Radio, Wifi, Disc3, CalendarClock, BellRing } from "lucide-react";
 
-const TRACKS = [
-  { title: "Golden Hour", artist: "JVKE", duration: 218 },
-  { title: "Stargirl Interlude", artist: "The Weeknd", duration: 112 },
-  { title: "Sunsetz", artist: "Cigarettes After Sex", duration: 232 },
-  { title: "Heat Waves", artist: "Glass Animals", duration: 238 },
-];
+// Schedule: tonight (or next) at 21:00 local
+const getNext9PM = () => {
+  const n = new Date();
+  const t = new Date(n.getFullYear(), n.getMonth(), n.getDate(), 21, 0, 0, 0);
+  if (n.getTime() >= t.getTime()) t.setDate(t.getDate() + 1);
+  return t;
+};
 
-const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+const pad = (n: number) => String(n).padStart(2, "0");
 
 const EQBar = ({ index }: { index: number }) => {
   const heights = [12, 24, 8, 32, 16, 28, 10, 36, 20, 14, 30, 18, 26, 10, 34, 22, 8, 28, 16, 32];
@@ -48,8 +49,8 @@ const FrequencyDial = () => (
 const FMPortal = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isLive, setIsLive] = useState(false);
-  const [trackIdx, setTrackIdx] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
+  const [target] = useState<Date>(() => getNext9PM());
+  const [now, setNow] = useState<Date>(new Date());
   const timerRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -57,30 +58,26 @@ const FMPortal = () => {
     return () => clearTimeout(t);
   }, []);
 
-  // simulated playback timer
   useEffect(() => {
-    const id = setInterval(() => {
-      setElapsed((e) => {
-        const dur = TRACKS[trackIdx].duration;
-        if (e + 1 >= dur) {
-          setTrackIdx((i) => (i + 1) % TRACKS.length);
-          return 0;
-        }
-        return e + 1;
-      });
-    }, 1000);
+    const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
-  }, [trackIdx]);
+  }, []);
+
+  const diffMs = Math.max(0, target.getTime() - now.getTime());
+  const totalSec = Math.floor(diffMs / 1000);
+  const hrs = Math.floor(totalSec / 3600);
+  const mins = Math.floor((totalSec % 3600) / 60);
+  const secs = totalSec % 60;
+  const isOnAir = diffMs === 0;
+
+  const dateLabel = target.toLocaleDateString(undefined, {
+    weekday: "short", month: "short", day: "numeric",
+  });
 
   const handleBroadcast = () => {
     setIsTransitioning(true);
-    timerRef.current = setTimeout(() => {
-      window.location.href = "https://example.com";
-    }, 3000);
+    timerRef.current = setTimeout(() => setIsTransitioning(false), 2200);
   };
-
-  const track = TRACKS[trackIdx];
-  const progress = (elapsed / track.duration) * 100;
 
   return (
     <>
@@ -111,7 +108,8 @@ const FMPortal = () => {
                 {isLive && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1.5">
                     <motion.div
-                      className="h-1.5 w-1.5 rounded-full bg-red-500"
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{ background: isOnAir ? "rgb(239 68 68)" : "hsl(var(--cobalt-glow))" }}
                       animate={{ opacity: [0.3, 1, 0.3] }}
                       transition={{ duration: 1.4, repeat: Infinity }}
                     />
@@ -119,7 +117,7 @@ const FMPortal = () => {
                       className="text-[9px] uppercase tracking-[0.2em]"
                       style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark) / 0.6)" }}
                     >
-                      On Air
+                      {isOnAir ? "On Air" : "Scheduled"}
                     </span>
                   </motion.div>
                 )}
@@ -161,7 +159,7 @@ const FMPortal = () => {
                 <FrequencyDial />
               </div>
 
-              {/* Now Playing card */}
+              {/* Live schedule card */}
               <div
                 className="mb-6 rounded-2xl border px-5 py-4"
                 style={{
@@ -174,46 +172,55 @@ const FMPortal = () => {
                     className="text-[8px] uppercase tracking-[0.4em]"
                     style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--cobalt-glow))" }}
                   >
-                    ◉ Now Playing
+                    <CalendarClock size={10} className="mr-1 inline -mt-0.5" /> Going Live
                   </span>
                   <span
                     className="text-[9px] tabular-nums"
                     style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark))" }}
                   >
-                    {fmt(elapsed)} / {fmt(track.duration)}
+                    {dateLabel} · 21:00
                   </span>
                 </div>
 
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={trackIdx}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <p className="font-heading text-base italic" style={{ color: "hsl(var(--silver-light))" }}>
-                      {track.title}
-                    </p>
-                    <p
-                      className="text-[10px] uppercase tracking-[0.3em]"
-                      style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark))" }}
-                    >
-                      {track.artist}
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
+                <p className="font-heading text-base italic" style={{ color: "hsl(var(--silver-light))" }}>
+                  {isOnAir ? "We're live — tune in now." : "A whisper at 9 PM, just for you."}
+                </p>
+                <p
+                  className="text-[10px] uppercase tracking-[0.3em]"
+                  style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark))" }}
+                >
+                  Hosted by · Sahil
+                </p>
 
-                {/* progress */}
-                <div className="mt-3 h-[2px] rounded-full" style={{ background: "hsl(var(--silver-dark) / 0.18)" }}>
-                  <div
-                    className="h-full rounded-full transition-all duration-1000 ease-linear"
-                    style={{
-                      width: `${progress}%`,
-                      background: "linear-gradient(90deg, hsl(var(--cobalt)), hsl(var(--silver-light)))",
-                      boxShadow: "0 0 8px hsla(218, 74%, 66%, 0.5)",
-                    }}
-                  />
+                {/* Countdown */}
+                <div className="mt-4 grid grid-cols-3 gap-2">
+                  {[
+                    { label: "Hrs", val: pad(hrs) },
+                    { label: "Min", val: pad(mins) },
+                    { label: "Sec", val: pad(secs) },
+                  ].map((u) => (
+                    <div
+                      key={u.label}
+                      className="rounded-xl border px-2 py-2 text-center"
+                      style={{
+                        background: "hsla(222, 40%, 8%, 0.55)",
+                        borderColor: "hsla(210, 18%, 82%, 0.08)",
+                      }}
+                    >
+                      <div
+                        className="font-heading text-2xl tabular-nums text-aurora"
+                        style={{ lineHeight: 1 }}
+                      >
+                        {u.val}
+                      </div>
+                      <div
+                        className="mt-1 text-[8px] uppercase tracking-[0.35em]"
+                        style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark) / 0.6)" }}
+                      >
+                        {u.label}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -224,18 +231,12 @@ const FMPortal = () => {
                 ))}
               </div>
 
-              {/* Volume */}
-              <div className="mb-8 flex items-center justify-center gap-3">
-                <Volume2 size={12} style={{ color: "hsl(var(--silver-dark) / 0.5)" }} />
-                <div className="h-[2px] w-32 rounded-full" style={{ background: "hsl(var(--silver-dark) / 0.18)" }}>
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{ background: "linear-gradient(90deg, hsl(var(--cobalt)), hsl(var(--silver)))" }}
-                    animate={{ width: ["40%", "70%", "55%", "80%", "40%"] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                </div>
-              </div>
+              <p
+                className="mb-6 text-[10px] tracking-[0.3em]"
+                style={{ fontFamily: "var(--font-mono)", color: "hsl(var(--silver-dark) / 0.55)" }}
+              >
+                Set a reminder · pour a chai · be near the window
+              </p>
 
               <motion.button
                 onClick={handleBroadcast}
@@ -245,8 +246,11 @@ const FMPortal = () => {
                 className="glow-button rounded-2xl px-8 py-4 text-[11px] uppercase tracking-[0.3em]"
                 style={{ color: "hsl(var(--silver) / 0.92)" }}
               >
-                <Radio size={12} className="mr-2 inline" strokeWidth={1.6} />
-                Tune into the Broadcast
+                {isOnAir ? (
+                  <><Radio size={12} className="mr-2 inline" strokeWidth={1.6} /> Tune in Live</>
+                ) : (
+                  <><BellRing size={12} className="mr-2 inline" strokeWidth={1.6} /> Remind me at 9 PM</>
+                )}
               </motion.button>
             </div>
 
