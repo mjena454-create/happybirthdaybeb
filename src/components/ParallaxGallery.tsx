@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
-import memory1 from "@/assets/memory-1.jpg";
+import memory1 from "@/assets/memory-1.png";
 import memory2 from "@/assets/memory-2.jpg";
 import memory3 from "@/assets/memory-3.jpg";
 import memory4 from "@/assets/memory-4.jpg";
@@ -53,7 +53,7 @@ const Polaroid = ({ frame, y }: { frame: Frame; y: MotionValue<number> }) => {
             src={frame.src}
             alt={frame.note}
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
+            className="absolute inset-0 h-full w-full transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06] object-contain"
           />
           <div
             className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
