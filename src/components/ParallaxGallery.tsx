@@ -53,7 +53,7 @@ const Polaroid = ({ frame, y }: { frame: Frame; y: MotionValue<number> }) => {
             src={frame.src}
             alt={frame.note}
             loading="lazy"
-            className="absolute inset-0 h-full w-full transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06] object-contain"
+            className="absolute inset-0 h-full w-full transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06] object-cover"
           />
           <div
             className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
